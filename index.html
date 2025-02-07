@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Peer-to-Peer</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fdf4f6;
+            color: #ff1493;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Headings */
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 3px 3px 10px rgba(255, 20, 147, 0.4);
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        /* Video Container */
+        .video-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .video-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 5px 15px rgba(255, 20, 147, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .video-box:hover {
+            transform: scale(1.1);
+        }
+
+        .video-box h2 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .video-box video {
+            width: 400px;
+            height: 270px;
+            background: black;
+            border-radius: 15px;
+            border: 3px solid #fff;
+        }
+
+        /* Controls */
+        button {
+            background: linear-gradient(to right, #ff1493, #ff69b4);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 15px rgba(255, 20, 147, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #d63384, #ff1493);
+            box-shadow: 0px 6px 20px rgba(255, 20, 147, 0.5);
+            transform: scale(1.08);
+        }
+
+        /* Token Section */
+        .token-section {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0px 4px 12px rgba(255, 20, 147, 0.3);
+        }
+
+        /* Textarea & Inputs */
+        textarea,
+        input {
+            width: 85%;
+            height: 50px;
+            padding: 8px;
+            margin: 12px;
+            border-radius: 10px;
+            border: 2px solid #ff1493;
+            background: rgba(255, 255, 255, 0.3);
+            color: #ff1493;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        textarea:focus,
+        input:focus {
+            border-color: #d63384;
+            box-shadow: 0px 0px 15px rgba(255, 20, 147, 0.4);
+        }
+
+        #chatBox {
+            width: 90%;
+            height: 200px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 15px;
+            margin: auto;
+            border-radius: 10px;
+            border: 2px solid #ff1493;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>WebRTC Manual Connection</h1>
+
+    <!-- Step 1: Generate Offer (Person A) -->
+    <h2>Step 1: Create Offer (Person A)</h2>
+    <button id="createOffer">Generate Offer</button> <br>
+    <textarea id="offerToken" readonly></textarea>
+
+    <!-- Step 2: Enter Offer (Person B) -->
+    <h2>Step 2: Enter Offer Token (Person B)</h2>
+    <textarea id="offerInput"></textarea> <br>
+    <button id="acceptOffer">Accept Offer</button>
+
+    <!-- Step 3: Generate Answer (Person B) -->
+    <h2>Step 3: Generate Answer (Person B)</h2>
+    <textarea id="answerToken" readonly></textarea>
+
+    <!-- Step 4: Enter Answer (Person A) -->
+    <h2>Step 4: Enter Answer Token (Person A)</h2>
+    <textarea id="answerInput"></textarea> <br>
+    <button id="acceptAnswer">Accept Answer</button>
+
+    <!-- Step 5: ICE Candidate Exchange -->
+    <h2>Step 5: ICE Candidate Exchange</h2>
+    <button id="gatherCandidates">Gather ICE Candidates</button>
+    <textarea id="iceCandidates" readonly></textarea>
+
+    <h2>Paste Received ICE Candidates</h2>
+    <textarea id="iceInput"></textarea> <br>
+    <button id="addIceCandidates">Add ICE Candidates</button>
+
+    <!-- Messaging Section -->
+    <h1>Messaging</h1>
+    <input type="text" id="messageInput" placeholder="Type a message..." />
+    <button id="sendMessage">Send</button>
+    <div id="chatBox"></div>
+
+    <h2>Controls</h2>
+    <button id="toggleMic">Mute Microphone</button>
+    <button id="toggleCam">Disable Camera</button>
+    <button id="startScreenShare">Start Screen Sharing</button>
+    <button id="stopScreenShare">Stop Screen Sharing</button>
+
+    <div class="video-container">
+        <div class="video-box">
+            <h2>Remote Video</h2>
+            <video id="remoteVideo" autoplay playsinline></video>
+        </div>
+
+        <div class="video-box">
+            <h2>Your Video</h2>
+            <video id="localVideo" autoplay playsinline muted></video>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
